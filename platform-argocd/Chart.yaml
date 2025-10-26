@@ -1,0 +1,12 @@
+apiVersion: v2
+name: platform-argocd
+description: Umbrella chart that installs Argo CD with our opinions
+type: application
+version: 7.6.8
+
+# Use the official Argo Helm repo/chart, but alias the name to "argocd"
+dependencies:
+  - name: argo-cd
+    version: 7.6.8          # <-- pin a specific version you’re happy with
+    repository: https://argoproj.github.io/argo-helm
+    alias: argocd

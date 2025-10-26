@@ -1,0 +1,34 @@
+# values.yaml (umbrella chart)
+argocd:
+  server:
+    # In kind we don’t have a cloud LoadBalancer. Keep ClusterIP and use port-forward.
+    service:
+      type: NodePort
+      nodePorts:
+        http: 30080
+        https: 30443
+
+  # Common, safe defaults for local dev:
+  controller:
+    resources:
+      requests: { cpu: "100m", memory: "256Mi" }
+      limits:   { cpu: "500m", memory: "512Mi" }
+  repoServer:
+    resources:
+      requests: { cpu: "100m", memory: "256Mi" }
+      limits:   { cpu: "500m", memory: "512Mi" }
+  applicationSet:
+    resources:
+      requests: { cpu: "50m", memory: "128Mi" }
+      limits:   { cpu: "200m", memory: "256Mi" }
+
+  # Configure Argo CD via its config maps/secrets
+  configs:
+    cm:
+      # Use recommended app labels for better UX in filters/queries
+      application.instanceLabelKey: app.kubernetes.io/instance
+    rbac:
+      # Simple example: make the default role 'readonly' (change to 'admin' if you prefer)
+      policy.default: role:readonly
+    secret:
+      argocdServerAdminPassword: $2a$10$BYmivCy75SmWmZtBQVpE8.Qu3xTgUfQihZd4ipFKH8iS7CDDbcnJK
